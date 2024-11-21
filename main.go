@@ -2,10 +2,12 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"movie_premiuem/entity"
 	"movie_premiuem/entity/repositories"
 	"movie_premiuem/services"
+	"movie_premiuem/utils"
 
 	"movie_premiuem/db/migrate"
 
@@ -38,13 +40,25 @@ func main() {
 
 	user := entity.User{
 		ID:       0,
-		Email:    "aliaghdam.erfan2@gmail.com",
+		Email:    "aliaghdam.erfan6@gmail.com",
 		Password: "Pass123!",
 	}
 	user, registerUserErr := userService.RegisterUser(user)
 	if registerUserErr != nil {
 		log.Fatalf("failed to register user: %v", registerUserErr)
 	}
+
+	access, refresh, jwtGenerateErr := utils.GenerateJWT(user.ID)
+	if jwtGenerateErr != nil {
+		log.Fatalf("failed to generate JWT: %v", jwtGenerateErr)
+	}
+	fmt.Printf("user refresh %v \n user access %v \n", refresh, access)
+
+	verified, verifyJwtErr := utils.VerifyToken(access)
+	if verifyJwtErr != nil {
+		log.Fatalf("failed to verify JWT: %v", verifyJwtErr)
+	}
+	fmt.Printf("user verified: %v", verified)
 
 }
 

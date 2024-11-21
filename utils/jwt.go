@@ -7,7 +7,7 @@ import (
 
 var secretKey = []byte("secret")
 
-func GenerateJWT(userID string) (string, string, error) {
+func GenerateJWT(userID int64) (string, string, error) {
 	AccessClaims := jwt.MapClaims{
 		"user_id": userID,
 		"exp":     time.Now().Add(time.Hour * 24).Unix(),
@@ -42,19 +42,19 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func VerifyToken(userToken string) (*Claims, error) {
-	claims := &Claims{}
+func VerifyToken(userToken string) (bool, error) {
+	claims := &jwt.RegisteredClaims{}
 
 	token, err := jwt.ParseWithClaims(
 		userToken,
-		*claims,
+		claims,
 		func(token *jwt.Token) (interface{}, error) {
 			return secretKey, nil
 		},
 	)
 	if err != nil || !token.Valid {
-		return nil, err
+		return false, err
 	}
 
-	return claims, nil
+	return true, nil
 }
