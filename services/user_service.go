@@ -25,7 +25,7 @@ func NewUserService(userRepo repositories.UserRepository) UserService {
 
 func (s *userService) RegisterUser(user entity.User) (entity.User, error) {
 	// Hash the password
-	hashedPassword := utils.HashPassword(user.Password)
+	hashedPassword, _ := utils.HashPassword(user.Password)
 	user.Password = hashedPassword
 
 	// Save the user to the database
