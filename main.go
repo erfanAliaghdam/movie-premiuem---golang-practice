@@ -61,8 +61,24 @@ func main() {
 	if verifyJwtErr != nil {
 		log.Fatalf("failed to verify JWT: %v", verifyJwtErr)
 	}
-	fmt.Printf("user verified: %v", verified)
+	fmt.Printf("user verified: %v \n", verified)
 
+	// test order
+	fmt.Println("----------")
+	// initialize order repo and service
+	order := entity.Order{
+		ID:        0,
+		UserID:    user.ID,
+		Paid:      false,
+		PaidPrice: 500.0,
+	}
+	orderRepository := repositories.NewOrderRepository(db)
+	orderService := services.NewOrderService(orderRepository)
+	order, orderCreateErr := orderService.CreateOrder(order)
+	if orderCreateErr != nil {
+		log.Fatalf("failed to create order: %v", orderCreateErr)
+	}
+	fmt.Printf("order created: %v", order)
 }
 
 //TIP See GoLand help at <a href="https://www.jetbrains.com/help/go/">jetbrains.com/help/go/</a>.
