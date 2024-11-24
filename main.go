@@ -4,10 +4,12 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"math/rand/v2"
 	"movie_premiuem/entity"
 	"movie_premiuem/entity/repositories"
 	"movie_premiuem/services"
 	"movie_premiuem/utils"
+	"strconv"
 
 	"movie_premiuem/db/migrate"
 
@@ -38,9 +40,10 @@ func main() {
 	userRepo := repositories.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
 
+	random_email_prefix := strconv.Itoa(rand.Int())
 	user := entity.User{
 		ID:       0,
-		Email:    "aliaghdam.erfan6@gmail.com",
+		Email:    fmt.Sprintf("aliaghdam.erfan%s@gmail.com", random_email_prefix),
 		Password: "Pass123!",
 	}
 	user, registerUserErr := userService.RegisterUser(user)
