@@ -27,23 +27,23 @@ func UP(db *sql.DB) error {
 			FOREIGN KEY(user_id) REFERENCES users(id)  -- Enforce user relationship
 		);`,
 
-		// licences table
-		`CREATE TABLE IF NOT EXISTS licences (
+		// licenses table
+		`CREATE TABLE IF NOT EXISTS licenses (
     		id INTEGER PRIMARY KEY AUTOINCREMENT,
     		title TEXT,
     		finish_month INTEGER NOT NULL,
     		price REAL NOT NULL DEFAULT 0.0,
-    		licence_type INTEGER NOT NULL
+    		license_type INTEGER NOT NULL
 		);`,
 
-		// users licence table
-		`CREATE TABLE IF NOT EXISTS users_licences (
+		// users license table
+		`CREATE TABLE IF NOT EXISTS users_licenses (
     		id INTEGER PRIMARY KEY AUTOINCREMENT,
     		user_id INTEGER NOT NULL,
     		license_id INTEGER NOT NULL,
     		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     		FOREIGN KEY(user_id) REFERENCES users(id),
-    		FOREIGN KEY(license_id) REFERENCES licences(id)
+    		FOREIGN KEY(license_id) REFERENCES licenses(id)
 		);`,
 	}
 

@@ -2,9 +2,11 @@ package main
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
 	"math/rand/v2"
+	"movie_premiuem/custom_errors"
 	"movie_premiuem/entity"
 	"movie_premiuem/entity/repositories"
 	"movie_premiuem/services"
@@ -79,6 +81,37 @@ func main() {
 		log.Fatalf("failed to create order: %v", orderCreateErr)
 	}
 	fmt.Printf("order created: %v", order)
+
+	//test user license
+	fmt.Println("----------")
+	license := entity.License{
+		ID:          0,
+		Title:       "license regular",
+		FinishMonth: 2,
+		Price:       2,
+		LicenseType: entity.RegularLicenseType,
+	}
+
+	licenseRepository := repositories.NewLicenseRepository(db)
+	license, createLicenseErr := licenseRepository.CreateLicense(license)
+	if createLicenseErr != nil {
+		log.Fatalf("failed to create license: %v", createLicenseErr)
+	}
+	fmt.Println("license created: %v", license)
+
+	fmt.Println("----------")
+	//test user license
+	userLicenseRepository := repositories.NewUserLicenseRepository(db)
+	userLicenseService := services.NewUserLicenseService(userLicenseRepository)
+	userLicense, userLicenseCreateErr := userLicenseService.CreateUserLicense(license.ID, user.ID)
+	if userLicenseCreateErr != nil {
+		if errors.Is(userLicenseCreateErr, custom_errors.ErrUserHasActiveLicense) {
+			log.Fatalf("user license already exists: %v", userLicenseCreateErr)
+		}
+		log.Fatalf("failed to create user license: %v", userLicenseCreateErr)
+	}
+
+	fmt.Println("license created for user : %v", userLicense)
 }
 
 //TIP See GoLand help at <a href="https://www.jetbrains.com/help/go/">jetbrains.com/help/go/</a>.
