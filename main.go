@@ -97,7 +97,7 @@ func main() {
 	if createLicenseErr != nil {
 		log.Fatalf("failed to create license: %v", createLicenseErr)
 	}
-	fmt.Println("license created: %v", license)
+	fmt.Printf("license created: %v\n", license)
 
 	fmt.Println("----------")
 	//test user license
@@ -111,7 +111,7 @@ func main() {
 		log.Fatalf("failed to create user license: %v", userLicenseCreateErr)
 	}
 
-	fmt.Println("license created for user : %v", userLicense)
+	fmt.Printf("license created for user : %v\n", userLicense)
 }
 
 //TIP See GoLand help at <a href="https://www.jetbrains.com/help/go/">jetbrains.com/help/go/</a>.

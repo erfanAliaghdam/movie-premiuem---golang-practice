@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"movie_premiuem/entity"
 	"movie_premiuem/entity/repositories"
-	"movie_premiuem/utils"
 )
 
 type UserService interface {
@@ -24,10 +23,6 @@ func NewUserService(userRepo repositories.UserRepository) UserService {
 }
 
 func (s *userService) RegisterUser(user entity.User) (entity.User, error) {
-	// Hash the password
-	hashedPassword, _ := utils.HashPassword(user.Password)
-	user.Password = hashedPassword
-
 	// Save the user to the database
 	cratedUser, userCreationErr := s.userRepository.CreateUser(user)
 	if userCreationErr != nil {
