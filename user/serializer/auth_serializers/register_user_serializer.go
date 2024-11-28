@@ -3,7 +3,7 @@ package auth_serializers
 import (
 	"encoding/json"
 	"github.com/go-playground/validator/v10"
-	"movie_premiuem/utils"
+	"movie_premiuem/core/utils"
 	"net/http"
 )
 

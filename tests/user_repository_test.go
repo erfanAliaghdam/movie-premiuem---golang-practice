@@ -2,9 +2,9 @@ package tests
 
 import (
 	"errors"
-	"movie_premiuem/entity"
-	"movie_premiuem/entity/repositories"
 	"movie_premiuem/tests/mocks/mock_utils"
+	"movie_premiuem/user/entity"
+	"movie_premiuem/user/repository"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -28,7 +28,7 @@ func TestUserRepositoryCreateUser(t *testing.T) {
 	)
 
 	// Create a repository instance
-	repo := repositories.NewUserRepository(db, mockHash)
+	repo := repository.NewUserRepository(db, mockHash)
 
 	// Define the user entity
 	inputUser := entity.User{

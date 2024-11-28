@@ -1,0 +1,13 @@
+### Get license list
+GET localhost:8001/licenses
+
+<> 2024-11-28T161750.200.json
+
+### Register User Request
+POST http://localhost:8001/auth/register
+Content-Type: application/json
+
+{
+  "email": "useasdr@examasdpleasd.com",
+  "password": "securepassword123"
+}
