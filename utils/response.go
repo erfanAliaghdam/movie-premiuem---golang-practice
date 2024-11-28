@@ -12,6 +12,13 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
+type ErrorResponse struct {
+	Status  string      `json:"status"`
+	Message string      `json:"message"`
+	Code    string      `json:"code"`
+	Errors  interface{} `json:"errors"`
+}
+
 func WriteJSONResponse(w http.ResponseWriter, response Response, statusCode int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
@@ -47,13 +54,17 @@ func ForbiddenError403(w http.ResponseWriter) {
 	}, http.StatusForbidden)
 }
 
-func BadRequestError400(w http.ResponseWriter, message string) {
-	WriteJSONResponse(w, Response{
-		Status:  "fail",
-		Message: message,
-		Code:    "BAD_REQUEST",
-		Data:    nil,
-	}, http.StatusBadRequest)
+func BadRequestError400(w http.ResponseWriter, message string, fieldErrors interface{}) {
+	response := map[string]interface{}{
+		"status":  "failed",
+		"message": message,
+	}
+	if fieldErrors != nil {
+		response["errors"] = fieldErrors
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusBadRequest)
+	json.NewEncoder(w).Encode(response)
 }
 
 func NotFoundError404(w http.ResponseWriter) {
@@ -63,4 +74,13 @@ func NotFoundError404(w http.ResponseWriter) {
 		Code:    "NOT_FOUND",
 		Data:    nil,
 	}, http.StatusNotFound)
+}
+
+func InvalidRequestMethod405(w http.ResponseWriter) {
+	WriteJSONResponse(w, Response{
+		Status:  "fail",
+		Message: "Invalid request method.",
+		Code:    "",
+		Data:    nil,
+	}, http.StatusMethodNotAllowed)
 }

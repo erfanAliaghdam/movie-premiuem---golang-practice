@@ -2,12 +2,12 @@ package services
 
 import (
 	"fmt"
-	"movie_premiuem/entity"
+	"movie_premiuem/custom_errors"
 	"movie_premiuem/entity/repositories"
 )
 
 type UserService interface {
-	RegisterUser(user entity.User) (entity.User, error)
+	RegisterUser(email string, password string) (int64, error)
 }
 
 type userService struct {
@@ -22,12 +22,20 @@ func NewUserService(userRepo repositories.UserRepository) UserService {
 	return &userService{userRepository: userRepo}
 }
 
-func (s *userService) RegisterUser(user entity.User) (entity.User, error) {
+func (s *userService) RegisterUser(email string, password string) (int64, error) {
+	// check if email exists or not
+	exists, userCheckError := s.userRepository.CheckIfUserExistsByEmail(email)
+	if userCheckError != nil {
+		return 0, userCheckError
+	}
+	if exists {
+		return 0, custom_errors.AlreadyExists
+	}
 	// Save the user to the database
-	cratedUser, userCreationErr := s.userRepository.CreateUser(user)
+	cratedUserID, userCreationErr := s.userRepository.CreateUser(email, password)
 	if userCreationErr != nil {
-		return entity.User{}, fmt.Errorf("failed to register user: %w", userCreationErr)
+		return 0, fmt.Errorf("failed to register user: %w", userCreationErr)
 	}
 
-	return cratedUser, nil
+	return cratedUserID, nil
 }

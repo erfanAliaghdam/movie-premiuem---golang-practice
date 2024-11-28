@@ -2,6 +2,7 @@ package routes
 
 import (
 	"movie_premiuem/handler"
+	"movie_premiuem/handler/auth_handlers"
 	"movie_premiuem/handler/license_handlers"
 	"movie_premiuem/logger"
 	"net/http"
@@ -21,7 +22,10 @@ func Routes() http.Handler {
 
 	// routes
 	mux.Get("/", handler.Index)
+	//licenses
 	mux.Get("/licenses", license_handlers.LicenseListHandler)
+	// auth
+	mux.Post("/auth/register", auth_handlers.RegisterUserHandler)
 
 	return mux
 }

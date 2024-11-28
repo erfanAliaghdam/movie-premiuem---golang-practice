@@ -2,12 +2,12 @@ package repositories
 
 import (
 	"database/sql"
-	"movie_premiuem/entity"
 	"movie_premiuem/utils"
 )
 
 type UserRepository interface {
-	CreateUser(user entity.User) (entity.User, error)
+	CreateUser(Email string, Password string) (int64, error)
+	CheckIfUserExistsByEmail(Email string) (bool, error)
 }
 
 type userRepository struct {
@@ -27,25 +27,36 @@ func NewUserRepository(db *sql.DB, hash ...utils.HashFactory) UserRepository {
 }
 
 // CreateUser inserts a new user into the database
-func (r *userRepository) CreateUser(user entity.User) (entity.User, error) {
-	hashedPassword, hashError := r.hash.HashPassword(user.Password)
+func (r *userRepository) CreateUser(Email string, Password string) (int64, error) {
+	hashedPassword, hashError := r.hash.HashPassword(Password)
 	if hashError != nil {
-		return entity.User{}, hashError
+		return 0, hashError
 	}
 
 	query := "INSERT INTO users (email, password) VALUES (?, ?)"
-	result, err := r.db.Exec(query, user.Email, user.Password)
+	result, err := r.db.Exec(query, Email, hashedPassword)
 	if err != nil {
-		return entity.User{}, err
+		return 0, err
 	}
 
 	// Get the last inserted ID to update the user entity
 	id, err := result.LastInsertId()
 	if err != nil {
-		return entity.User{}, err
+		return 0, err
 	}
-	user.ID = id
-	user.Password = hashedPassword
 
-	return user, nil
+	return id, nil
+}
+
+func (r *userRepository) CheckIfUserExistsByEmail(Email string) (bool, error) {
+	query := "SELECT id FROM users WHERE email = ?"
+	row := r.db.QueryRow(query, Email)
+
+	var id int64
+	err := row.Scan(&id)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
