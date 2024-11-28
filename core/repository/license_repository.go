@@ -1,8 +1,8 @@
-package repositories
+package repository
 
 import (
 	"database/sql"
-	"movie_premiuem/entity"
+	"movie_premiuem/core/entity"
 )
 
 type LicenseRepository interface {

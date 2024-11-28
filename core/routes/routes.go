@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"movie_premiuem/handler"
-	"movie_premiuem/handler/auth_handlers"
-	"movie_premiuem/handler/license_handlers"
-	"movie_premiuem/logger"
+	"movie_premiuem/core/handler"
+	"movie_premiuem/core/handler/license_handlers"
+	customMiddlewares "movie_premiuem/core/middleware"
+	"movie_premiuem/user/handler/auth_handlers"
 	"net/http"
 	"time"
 
@@ -15,10 +15,10 @@ import (
 func Routes() http.Handler {
 	mux := chi.NewRouter()
 
-	// middlewares
+	// middleware
 	mux.Use(middleware.Recoverer)
 	mux.Use(middleware.Timeout(60 * time.Second))
-	mux.Use(logger.LogRequestsMiddleware) // Add the custom log middleware
+	mux.Use(customMiddlewares.LogRequestsMiddleware) // Add the custom log middleware
 
 	// routes
 	mux.Get("/", handler.Index)

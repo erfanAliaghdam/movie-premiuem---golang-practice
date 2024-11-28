@@ -5,15 +5,15 @@ import (
 	"fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
-	"movie_premiuem/app"
-	"movie_premiuem/routes"
+	"movie_premiuem/core"
+	"movie_premiuem/core/routes"
 	"net/http"
 	"time"
 )
 
 func main() {
-	app.InitApplication("./movie_premium.db", "localhost:6379")
-	defer app.AppInstance.CloseDB()
+	core.InitApplication("./movie_premium.db", "localhost:6379")
+	defer core.AppInstance.CloseDB()
 
 	db, err := sql.Open("sqlite3", "./movie_premium.db")
 	if err != nil {

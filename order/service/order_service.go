@@ -1,8 +1,8 @@
-package services
+package service
 
 import (
-	"movie_premiuem/entity"
-	"movie_premiuem/entity/repositories"
+	"movie_premiuem/order/entity"
+	"movie_premiuem/order/repository"
 )
 
 type OrderService interface {
@@ -10,10 +10,10 @@ type OrderService interface {
 }
 
 type orderService struct {
-	orderRepository repositories.OrderRepository
+	orderRepository repository.OrderRepository
 }
 
-func NewOrderService(orderRepository repositories.OrderRepository) OrderService {
+func NewOrderService(orderRepository repository.OrderRepository) OrderService {
 	if orderRepository == nil {
 		panic("orderRepository cannot be nil")
 	}

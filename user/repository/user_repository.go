@@ -1,8 +1,8 @@
-package repositories
+package repository
 
 import (
 	"database/sql"
-	"movie_premiuem/utils"
+	"movie_premiuem/core/utils"
 )
 
 type UserRepository interface {
@@ -55,8 +55,14 @@ func (r *userRepository) CheckIfUserExistsByEmail(Email string) (bool, error) {
 	var id int64
 	err := row.Scan(&id)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			// No rows were found; user does not exist
+			return false, nil
+		}
+		// An actual error occurred
 		return false, err
 	}
 
+	// User exists
 	return true, nil
 }

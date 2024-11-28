@@ -1,8 +1,8 @@
-package services
+package service
 
 import (
-	"movie_premiuem/custom_errors"
-	"movie_premiuem/entity/repositories"
+	"movie_premiuem/core/custom_errors"
+	"movie_premiuem/user/repository"
 )
 
 type UserLicenseService interface {
@@ -10,10 +10,10 @@ type UserLicenseService interface {
 }
 
 type userLicenseService struct {
-	repository repositories.UserLicenseRepository
+	repository repository.UserLicenseRepository
 }
 
-func NewUserLicenseService(userLicenseRepository repositories.UserLicenseRepository) UserLicenseService {
+func NewUserLicenseService(userLicenseRepository repository.UserLicenseRepository) UserLicenseService {
 	if userLicenseRepository == nil {
 		panic("userLicenseRepository cannot be nil")
 	}

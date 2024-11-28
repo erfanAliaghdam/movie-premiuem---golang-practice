@@ -1,9 +1,9 @@
-package services
+package service
 
 import (
 	"fmt"
-	"movie_premiuem/custom_errors"
-	"movie_premiuem/entity/repositories"
+	"movie_premiuem/core/custom_errors"
+	"movie_premiuem/user/repository"
 )
 
 type UserService interface {
@@ -11,11 +11,11 @@ type UserService interface {
 }
 
 type userService struct {
-	userRepository repositories.UserRepository
+	userRepository repository.UserRepository
 }
 
 // NewUserService initializes a new UserService
-func NewUserService(userRepo repositories.UserRepository) UserService {
+func NewUserService(userRepo repository.UserRepository) UserService {
 	if userRepo == nil {
 		panic("userRepo cannot be nil")
 	}
