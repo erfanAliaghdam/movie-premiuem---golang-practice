@@ -26,6 +26,7 @@ func Routes() http.Handler {
 	mux.Get("/licenses", license_handlers.LicenseListHandler)
 	// auth
 	mux.Post("/auth/register", auth_handlers.RegisterUserHandler)
+	mux.Post("/auth/login", auth_handlers.LoginUserHandler)
 
 	return mux
 }

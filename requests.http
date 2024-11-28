@@ -11,3 +11,12 @@ Content-Type: application/json
   "email": "useasdr@examasdpleasd.com",
   "password": "securepassword123"
 }
+
+### Login User Request
+POST http://localhost:8001/auth/login
+Content-Type: application/json
+
+{
+  "email": "useasdr@examasdpleasd.com",
+  "password": "securepassword123"
+}
