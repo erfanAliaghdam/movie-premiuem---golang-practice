@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"errors"
 	"github.com/golang-jwt/jwt/v5"
+	"log"
 	"time"
 )
 
@@ -37,13 +39,8 @@ func GenerateJWT(userID int64) (string, string, error) {
 	return signedAccessToken, signedRefreshToken, nil
 }
 
-type Claims struct {
-	UserID string `json:"user_id"`
-	jwt.RegisteredClaims
-}
-
-func VerifyToken(userToken string) (bool, error) {
-	claims := &jwt.RegisteredClaims{}
+func VerifyRefreshToken(userToken string) (int64, error) {
+	claims := jwt.MapClaims{}
 
 	token, err := jwt.ParseWithClaims(
 		userToken,
@@ -53,8 +50,17 @@ func VerifyToken(userToken string) (bool, error) {
 		},
 	)
 	if err != nil || !token.Valid {
-		return false, err
+		log.Println("error occurred in verify refresh token :", err)
+		return 0, err
 	}
 
-	return true, nil
+	// Extract user_id from the claims
+	userIDFloat, ok := claims["user_id"].(float64) // Claims are unmarshalled as float64
+	if !ok {
+		log.Println("error occurred in verify refresh token : user_id not found in token claims")
+		return 0, errors.New("user_id not found in token claims")
+	}
+
+	userID := int64(userIDFloat)
+	return userID, nil
 }

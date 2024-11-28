@@ -20,3 +20,11 @@ Content-Type: application/json
   "email": "useasdr@examasdpleasd.com",
   "password": "securepassword123"
 }
+
+### Refresh token Request
+POST http://localhost:8001/auth/refresh
+Content-Type: application/json
+
+{
+  "refresh_token" : "test"
+}

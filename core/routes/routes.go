@@ -27,6 +27,7 @@ func Routes() http.Handler {
 	// auth
 	mux.Post("/auth/register", auth_handlers.RegisterUserHandler)
 	mux.Post("/auth/login", auth_handlers.LoginUserHandler)
+	mux.Post("/auth/refresh", auth_handlers.RefreshTokenHandler)
 
 	return mux
 }
