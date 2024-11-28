@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	app.InitApplication("./movie_premium.db")
+	app.InitApplication("./movie_premium.db", "localhost:6379")
 	defer app.AppInstance.CloseDB()
 
 	db, err := sql.Open("sqlite3", "./movie_premium.db")
