@@ -30,7 +30,7 @@ func UP(db *sql.DB) error {
 		// licenses table
 		`CREATE TABLE IF NOT EXISTS licenses (
     		id INTEGER PRIMARY KEY AUTOINCREMENT,
-    		title TEXT,
+    		title VARCHAR(255),
     		finish_month INTEGER NOT NULL,
     		price REAL NOT NULL DEFAULT 0.0,
     		license_type INTEGER NOT NULL
@@ -45,6 +45,24 @@ func UP(db *sql.DB) error {
     		FOREIGN KEY(user_id) REFERENCES users(id),
     		FOREIGN KEY(license_id) REFERENCES licenses(id)
 		);`,
+
+		// movies table
+		`CREATE TABLE IF NOT EXISTS movies (
+    		id INTEGER PRIMARY KEY AUTOINCREMENT,
+    		title VARCHAR(255),
+    		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    		description Text
+    	);`,
+
+		// movie urls table
+		`CREATE TABLE IF NOT EXISTS movie_urls (
+    		id INTEGER PRIMARY KEY AUTOINCREMENT,
+    		title VARCHAR(255),
+    		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    		url Text,
+    		movie_id INTEGER NOT NULL,
+    		FOREIGN KEY(movie_id) REFERENCES movies(id)
+    	);`,
 	}
 
 	for _, query := range migrations {
