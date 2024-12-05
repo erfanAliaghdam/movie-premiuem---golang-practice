@@ -7,7 +7,6 @@ import (
 	"movie_premiuem/movie/repository"
 	userRepo "movie_premiuem/user/repository"
 	"net/http"
-	"strings"
 )
 
 func MovieListHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,26 +20,15 @@ func MovieListHandler(w http.ResponseWriter, r *http.Request) {
 	// get configs
 	db := core.AppInstance.GetDB()
 
-	// check if user is authenticated
-	authHeader := r.Header.Get("Authorization")
-	if authHeader == "" {
-		log.Println("Authorization header is missing")
+	authenticatedUserID := r.Context().Value("AuthenticatedUserID")
+	if authenticatedUserID == nil {
+		log.Println("Authenticated user ID not found in request context")
 		utils.UnauthorizedError401(w)
 		return
 	}
 
-	token := strings.TrimSpace(strings.TrimPrefix(authHeader, "Bearer"))
-	if token == "" {
-		log.Println("Bearer token is missing in the Authorization header")
-		utils.UnauthorizedError401(w)
-		return
-	}
-
-	userID, tokenErr := utils.VerifyToken(token)
-	if tokenErr != nil {
-		utils.UnauthorizedError401(w)
-		return
-	}
+	// reformat userID
+	userID := authenticatedUserID.(int64)
 
 	// check permissions
 	userLicenseRepository := userRepo.NewUserLicenseRepository(db)

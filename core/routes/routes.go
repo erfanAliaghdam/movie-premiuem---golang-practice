@@ -30,7 +30,13 @@ func Routes() http.Handler {
 	mux.Post("/auth/login", auth_handlers.LoginUserHandler)
 	mux.Post("/auth/refresh", auth_handlers.RefreshTokenHandler)
 	//movie
-	mux.Get("/movies", movieHandlers.MovieListHandler)
+	mux.Route(
+		"/movies",
+		func(r chi.Router) {
+			r.Use(customMiddlewares.AuthenticatedUserMiddleware)
+			r.Get("/", movieHandlers.MovieListHandler)
+		},
+	)
 
 	return mux
 }
