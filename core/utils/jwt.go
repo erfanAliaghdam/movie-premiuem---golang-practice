@@ -64,3 +64,41 @@ func VerifyRefreshToken(userToken string) (int64, error) {
 	userID := int64(userIDFloat)
 	return userID, nil
 }
+
+func VerifyToken(userToken string) (int64, error) {
+	// Parse the token with claims
+	claims := jwt.MapClaims{}
+
+	token, err := jwt.ParseWithClaims(
+		userToken,
+		claims,
+		func(token *jwt.Token) (interface{}, error) {
+			return secretKey, nil
+		},
+	)
+	if err != nil || !token.Valid {
+		log.Println("error occurred in verify token:", err)
+		return 0, err
+	}
+
+	// Check expiration time
+	exp, ok := claims["exp"].(float64)
+	if !ok {
+		log.Println("error occurred in verify token: exp claim missing or invalid")
+		return 0, errors.New("invalid token: expiration claim missing")
+	}
+	if time.Unix(int64(exp), 0).Before(time.Now()) {
+		log.Println("error occurred in verify token: token has expired")
+		return 0, errors.New("token has expired")
+	}
+
+	// Extract user_id from the claims
+	userIDFloat, ok := claims["user_id"].(float64) // Claims are unmarshalled as float64
+	if !ok {
+		log.Println("error occurred in verify token: user_id not found in token claims")
+		return 0, errors.New("user_id not found in token claims")
+	}
+
+	userID := int64(userIDFloat)
+	return userID, nil
+}

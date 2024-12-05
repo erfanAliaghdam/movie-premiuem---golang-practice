@@ -4,6 +4,7 @@ import (
 	"movie_premiuem/core/handler"
 	"movie_premiuem/core/handler/license_handlers"
 	customMiddlewares "movie_premiuem/core/middleware"
+	movieHandlers "movie_premiuem/movie/handler"
 	"movie_premiuem/user/handler/auth_handlers"
 	"net/http"
 	"time"
@@ -28,6 +29,8 @@ func Routes() http.Handler {
 	mux.Post("/auth/register", auth_handlers.RegisterUserHandler)
 	mux.Post("/auth/login", auth_handlers.LoginUserHandler)
 	mux.Post("/auth/refresh", auth_handlers.RefreshTokenHandler)
+	//movie
+	mux.Get("/movies", movieHandlers.MovieListHandler)
 
 	return mux
 }

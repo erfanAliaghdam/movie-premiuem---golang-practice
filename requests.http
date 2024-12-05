@@ -28,3 +28,8 @@ Content-Type: application/json
 {
   "refresh_token" : "test"
 }
+
+### Movie list
+GET http://localhost:8001/movies
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM1MjQ1ODgsImlhdCI6MTczMzQzODE4OCwidXNlcl9pZCI6MX0._rFmTzTRF6em0ILfZsr77UF5Typ4txbRljaf9kzZ6bE
