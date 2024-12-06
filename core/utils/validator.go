@@ -6,7 +6,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func FieldValidator(err error) map[string]string {
+func fieldValidator(err error) map[string]string {
 	var validationErrors validator.ValidationErrors
 	if errors.As(err, &validationErrors) {
 		fieldErrors := make(map[string]string)
@@ -17,4 +17,18 @@ func FieldValidator(err error) map[string]string {
 	}
 
 	return nil
+}
+
+func ValidateField(structForValidation interface{}) (bool, map[string]string) {
+	validate := validator.New()
+	err := validate.Struct(structForValidation)
+	if err != nil {
+		fields := fieldValidator(err)
+		if fields != nil {
+			return false, fields
+		}
+		return false, nil
+	}
+	return true, map[string]string{}
+
 }

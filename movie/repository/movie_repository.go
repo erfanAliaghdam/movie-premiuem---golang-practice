@@ -10,6 +10,7 @@ import (
 
 type MovieRepository interface {
 	GetMovieList() ([]combinedEntity.MovieWithUrls, error)
+	CreateMovie(title string, description string, imageUrl string) (entity.Movie, error)
 }
 
 type movieRepository struct {
@@ -91,4 +92,30 @@ func (r *movieRepository) GetMovieList() ([]combinedEntity.MovieWithUrls, error)
 	}
 
 	return movies, nil
+}
+
+func (r *movieRepository) CreateMovie(title string, description string, imageUrl string) (entity.Movie, error) {
+	query := `INSERT INTO movies (title, description, image_url) VALUES (?, ?, ?)
+				RETURNING id, title, description, image_url, created_at;`
+
+	var createdMovie entity.Movie
+
+	err := r.db.QueryRow(
+		query,
+		title,
+		description,
+		imageUrl,
+	).Scan(
+		&createdMovie.ID,
+		&createdMovie.Title,
+		&createdMovie.Description,
+		&createdMovie.ImageUrl,
+		&createdMovie.CreatedAt,
+	)
+	if err != nil {
+		return entity.Movie{}, err
+	}
+
+	return createdMovie, nil
+
 }

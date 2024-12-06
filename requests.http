@@ -33,3 +33,14 @@ Content-Type: application/json
 GET http://localhost:8001/movies
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM1MjU4ODIsImlhdCI6MTczMzQzOTQ4MiwidXNlcl9pZCI6MX0.xuCQSK_ySXW5hD-2b_awv2Qk43iSrftBUQbBnVKj8s
+
+### Movie create
+POST http://localhost:8001/movies/create
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzM1OTYzNzcsImlhdCI6MTczMzUwOTk3NywidXNlcl9pZCI6MX0.QlTTz71vnx68Ydkp_bvhlSkPpb_MNATrPhJDUjLCMpI
+
+{
+  "title": "Inception",
+  "description": "A mind-bending thriller about dream invasion.",
+  "image_file": ""
+}

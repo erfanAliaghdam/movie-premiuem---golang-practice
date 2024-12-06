@@ -50,12 +50,16 @@ func GeneratePreSignedURL(fileName string) (string, error) {
 
 }
 
-func UploadFileToBucket(fileContent *bytes.Reader, fileName string) error {
+func UploadFileToBucket(fileContent *bytes.Reader, fileName string) (string, error) {
 	appConfig := core.LoadConfig()
 
-	cfg, err := bucketConfig.LoadDefaultConfig(context.TODO(), bucketConfig.WithRegion("us-west-2"))
+	cfg, err := bucketConfig.LoadDefaultConfig(
+		context.TODO(),
+		bucketConfig.WithRegion("us-east-1"),
+		bucketConfig.WithLogConfigurationWarnings(true),
+	)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// Define AWS credentials and bucket information
@@ -79,12 +83,18 @@ func UploadFileToBucket(fileContent *bytes.Reader, fileName string) error {
 	// Specify the destination key in the bucket
 	destinationKey := "golang/" + fileName
 
-	// Use the S3 client to upload the file
+	// Upload the file to S3
 	_, err = client.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket: aws.String(bucketName),
 		Key:    aws.String(destinationKey),
 		Body:   fileContent,
 	})
+	if err != nil {
+		return "", err
+	}
 
-	return err
+	// Construct the public URL for the file (no expiration)
+	publicURL := appConfig.BucketEndpoint + "/" + destinationKey
+
+	return publicURL, nil
 }

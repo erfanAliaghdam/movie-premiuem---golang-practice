@@ -35,6 +35,7 @@ func Routes() http.Handler {
 		func(r chi.Router) {
 			r.Use(customMiddlewares.AuthenticatedUserMiddleware)
 			r.Get("/", movieHandlers.MovieListHandler)
+			r.Post("/create", movieHandlers.MovieCreateHandler)
 		},
 	)
 

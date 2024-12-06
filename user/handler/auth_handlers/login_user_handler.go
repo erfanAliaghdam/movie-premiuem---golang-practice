@@ -5,7 +5,7 @@ import (
 	"movie_premiuem/core"
 	"movie_premiuem/core/utils"
 	"movie_premiuem/user/repository"
-	"movie_premiuem/user/serializer/auth_serializers"
+	"movie_premiuem/user/validator/auth_serializers"
 	"net/http"
 )
 
@@ -17,8 +17,8 @@ func LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	serializer := auth_serializers.NewLoginUserSerializer(r)
-	isValid, errorFields := serializer.Serialize()
+	validator := auth_serializers.NewLoginUserValidator(r)
+	isValid, errorFields := validator.Validate()
 	if !isValid {
 		utils.BadRequestError400(w, "Bad Request.", errorFields)
 		return
@@ -26,8 +26,8 @@ func LoginUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	userRepository := repository.NewUserRepository(db)
 	userIsValid, userId, userValidationErr := userRepository.ValidateUserByEmailAndPassword(
-		serializer.Email,
-		serializer.Password,
+		validator.Email,
+		validator.Password,
 	)
 	if userValidationErr != nil || !userIsValid {
 		log.Println("error occurred in user login handler :", userValidationErr)

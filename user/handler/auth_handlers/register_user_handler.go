@@ -7,8 +7,8 @@ import (
 	"movie_premiuem/core/custom_errors"
 	"movie_premiuem/core/utils"
 	"movie_premiuem/user/repository"
-	"movie_premiuem/user/serializer/auth_serializers"
 	"movie_premiuem/user/service"
+	"movie_premiuem/user/validator/auth_serializers"
 	"net/http"
 )
 
@@ -19,8 +19,8 @@ func RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 		utils.InvalidRequestMethod405(w)
 	}
 
-	serializer := auth_serializers.NewRegisterUserSerializer(r)
-	isValid, errorFields := serializer.Serialize()
+	validator := auth_serializers.NewRegisterUserValidator(r)
+	isValid, errorFields := validator.Validate()
 	if !isValid {
 		utils.BadRequestError400(w, "Bad request.", errorFields)
 		return
@@ -29,7 +29,7 @@ func RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 	userRepository := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepository)
 
-	_, registerUserErr := userService.RegisterUser(serializer.Email, serializer.Password)
+	_, registerUserErr := userService.RegisterUser(validator.Email, validator.Password)
 	if registerUserErr != nil {
 		if errors.Is(registerUserErr, custom_errors.AlreadyExists) {
 			utils.BadRequestError400(w, "User already exists.", nil)
