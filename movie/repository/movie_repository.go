@@ -27,6 +27,7 @@ func (r *movieRepository) GetMovieList() ([]combinedEntity.MovieWithUrls, error)
 			movies.title AS title,
 			movies.created_at AS created_at,
 			movies.description AS description,
+			movies.image_url AS image_url,
 			COALESCE(
 				json_group_array(
 					json_object(
@@ -66,6 +67,7 @@ func (r *movieRepository) GetMovieList() ([]combinedEntity.MovieWithUrls, error)
 			&movie.Title,
 			&movie.CreatedAt,
 			&movie.Description,
+			&movie.ImageUrl,
 			&urlsJSON,
 		)
 		if scanErr != nil {

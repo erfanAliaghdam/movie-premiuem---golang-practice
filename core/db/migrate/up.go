@@ -51,7 +51,8 @@ func UP(db *sql.DB) error {
     		id INTEGER PRIMARY KEY AUTOINCREMENT,
     		title VARCHAR(255),
     		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    		description Text
+    		description Text,
+    		image_url VARCHAR(500)         
     	);`,
 
 		// movie urls table
