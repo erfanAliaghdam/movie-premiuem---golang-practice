@@ -13,6 +13,7 @@ import (
 	combinedEntity "movie_premiuem/movie/entity/combined_eneities"
 )
 
+//go:generate mockery --name=MovieRepository
 type MovieRepository interface {
 	GetMovieList() ([]combinedEntity.MovieWithUrls, error)
 	GetMovieDetail(movieID int64) (combinedEntity.MovieWithUrls, error)

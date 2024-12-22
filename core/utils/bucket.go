@@ -10,7 +10,15 @@ import (
 	"time"
 )
 
-func GeneratePreSignedURL(fileName string) (string, error) {
+//go:generate mockery --name=Bucket
+type Bucket interface {
+	GeneratePreSignedURL(fileName string) (string, error)
+	UploadFileToBucket(fileContent *bytes.Reader, fileName string) (string, error)
+}
+
+type S3Bucket struct{}
+
+func (s *S3Bucket) GeneratePreSignedURL(fileName string) (string, error) {
 	appConfig := core.LoadConfig()
 
 	// initialize bucket
@@ -50,7 +58,7 @@ func GeneratePreSignedURL(fileName string) (string, error) {
 
 }
 
-func UploadFileToBucket(fileContent *bytes.Reader, fileName string) (string, error) {
+func (s *S3Bucket) UploadFileToBucket(fileContent *bytes.Reader, fileName string) (string, error) {
 	appConfig := core.LoadConfig()
 
 	cfg, err := bucketConfig.LoadDefaultConfig(
