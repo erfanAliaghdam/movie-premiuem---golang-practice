@@ -32,7 +32,7 @@ func GeneratePreSignedURL(fileName string) (string, error) {
 	preSignClient := s3.NewPresignClient(s3client)
 
 	// Specify the destination key in the bucket
-	destinationKey := "golang/" + fileName
+	destinationKey := "movies/" + fileName
 
 	// PreSign the GET object request
 	preSignedUrl, preSignedUrlErr := preSignClient.PresignGetObject(context.Background(), &s3.GetObjectInput{
@@ -55,7 +55,7 @@ func UploadFileToBucket(fileContent *bytes.Reader, fileName string) (string, err
 
 	cfg, err := bucketConfig.LoadDefaultConfig(
 		context.TODO(),
-		bucketConfig.WithRegion("us-east-1"),
+		bucketConfig.WithRegion("Frankfurt-2"),
 		bucketConfig.WithLogConfigurationWarnings(true),
 	)
 	if err != nil {
@@ -81,7 +81,7 @@ func UploadFileToBucket(fileContent *bytes.Reader, fileName string) (string, err
 	client := s3.NewFromConfig(cfg)
 
 	// Specify the destination key in the bucket
-	destinationKey := "golang/" + fileName
+	destinationKey := "movies/" + fileName
 
 	// Upload the file to S3
 	_, err = client.PutObject(context.TODO(), &s3.PutObjectInput{

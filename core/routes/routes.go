@@ -33,7 +33,8 @@ func Routes() http.Handler {
 	mux.Route(
 		"/movies",
 		func(r chi.Router) {
-			r.Use(customMiddlewares.AuthenticatedUserMiddleware)
+			//r.Use(customMiddlewares.AuthenticatedUserMiddleware)
+			r.Get("/detail/{id}", movieHandlers.MovieDetailHandler)
 			r.Get("/", movieHandlers.MovieListHandler)
 			r.Post("/create", movieHandlers.MovieCreateHandler)
 		},

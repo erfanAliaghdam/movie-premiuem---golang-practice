@@ -21,11 +21,6 @@ func MovieListHandler(w http.ResponseWriter, r *http.Request) {
 	db := core.AppInstance.GetDB()
 
 	authenticatedUserID := r.Context().Value("AuthenticatedUserID")
-	if authenticatedUserID == nil {
-		log.Println("Authenticated user ID not found in request context")
-		utils.UnauthorizedError401(w)
-		return
-	}
 
 	// reformat userID
 	userID := authenticatedUserID.(int64)
