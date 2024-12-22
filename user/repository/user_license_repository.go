@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+//go:generate mockery --name=UserLicenseRepository
 type UserLicenseRepository interface {
 	CreateUserLicense(licenseID int64, userID int64) (bool, error)
 	CheckIfUserHasActiveLicense(userID int64) (bool, error)

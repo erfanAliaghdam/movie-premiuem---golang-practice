@@ -7,6 +7,7 @@ import (
 	"movie_premiuem/user/entity"
 )
 
+//go:generate mockery --name=UserRepository
 type UserRepository interface {
 	CreateUser(Email string, Password string) (int64, error)
 	CheckIfUserExistsByEmail(Email string) (bool, error)
